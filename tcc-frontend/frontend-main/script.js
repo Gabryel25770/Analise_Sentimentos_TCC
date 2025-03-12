@@ -5,7 +5,7 @@ function teste(){
     let texto = campoTexto.value;
 
     if(texto.length < 1) {
-        alert("Digite algo para ser analisado!")
+        alert("Digite algum texto para ser analisado!")
         return
     }
 
