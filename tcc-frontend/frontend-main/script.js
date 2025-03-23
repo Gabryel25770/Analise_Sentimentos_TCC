@@ -14,7 +14,7 @@ function teste(){
         return
     }
 
-    console.log("Resultado em texto: ", texto)
+    console.log("Resultado: ", texto)
 }
 
 
