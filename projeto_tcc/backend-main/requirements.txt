@@ -2,4 +2,5 @@ flask
 flask-cors
 torch
 transformers
+sentencepiece
 googletrans==4.0.0-rc1
