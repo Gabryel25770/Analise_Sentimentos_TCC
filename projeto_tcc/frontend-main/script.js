@@ -32,7 +32,7 @@ async function teste(){
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/analyze', {
+        const response = await fetch('http://analisesentimentostcc-production.up.railway.app/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: texto })
