@@ -130,6 +130,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 50vh;
     padding: 40px 0 0;
 }
 
@@ -275,6 +276,6 @@ ul {
 
 
 #mainImage{
-    height: 400px;
+    height: 100%;
     margin-left: 100px
 }

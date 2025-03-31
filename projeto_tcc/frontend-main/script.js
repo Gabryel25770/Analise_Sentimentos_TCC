@@ -1,3 +1,4 @@
+
 function abrirPopup() {
     document.getElementById('popup').style.display = 'flex';
 }
@@ -16,23 +17,54 @@ function fecharAlertNoText() {
     document.getElementById('popup_noText').style.display = 'none';
 }
 
-function teste(){
+async function teste(){
     let campoTexto = document.getElementById("campotext");
     let texto = campoTexto.value;
 
     if(texto.length < 1) {
-        abrirAlertNoText()
-        return
+        abrirAlertNoText();
+        return;
     }
 
     if(texto.length < 4) {
-        alert("Digite mais para que a analise seja possível!")
-        return
+        alert("Digite mais para que a análise seja possível!");
+        return;
     }
 
-    abrirPopup()
+    try {
+        const response = await fetch('http://127.0.0.1:5000/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: texto })
+        });
 
-    console.log("Resultado: ", texto)
+        const data = await response.json();
+
+        if (data.error) {
+            alert("Erro: " + data.error);
+            return;
+        }
+
+        var sentimento;
+
+        switch(data.sentiment){
+            case 'positive':
+                sentimento = 'positivo';
+                break;
+            case 'negative':
+                sentimento = 'negativo';
+                break;
+            case 'neutral':
+                sentimento = 'neutro';
+                break;
+            default:
+                break;
+        }
+
+        document.getElementById("popup").querySelector("p").innerHTML = `O sentimento detectado foi <strong>${sentimento}</strong>.`;
+        abrirPopup();
+    } catch (error) {
+        alert("Erro ao conectar ao servidor.");
+        console.error(error);
+    }
 }
-
-
