@@ -6,7 +6,7 @@ from googletrans import Translator
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/analyze": {"origins": "*"}})  # Libera acesso para o frontend
+CORS(app)  # Libera acesso para o frontend
 
 modelo_huggingface = "GABRYEL25770/TrainedModel"
 
