@@ -5,18 +5,15 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 from googletrans import Translator
 
 app = Flask(__name__)
-CORS(app, resources={r"/analyze": {"origins": "*"}})  # Libera acesso para o frontend se comunicar com o backend
+CORS(app, resources={r"/analyze": {"origins": "*"}})  # Libera acesso para o frontend
 
-# Carregar modelo diretamente do Hugging Face Hub
 modelo_huggingface = "GABRYEL25770/TrainedModel"
 
+# Inicializa apenas o tokenizer globalmente (modelo será carregado sob demanda)
 tokenizer = T5Tokenizer.from_pretrained(modelo_huggingface)
-model = T5ForConditionalGeneration.from_pretrained(modelo_huggingface)
 
 # Dispositivo
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-model.eval()
 
 # Inicializa tradutor
 translator = Translator()
@@ -31,12 +28,26 @@ def predict_sentiment(text):
     texto_en = traduzir_para_ingles(text)
 
     input_text = f"classify sentiment: {texto_en}"
-    inputs = tokenizer(input_text, return_tensors="pt", max_length=128, truncation=True).to(device)
+    inputs = tokenizer(input_text, return_tensors="pt", max_length=64, truncation=True).to(device)
+
+    # ⚡️ Carrega o modelo somente quando necessário
+    model = T5ForConditionalGeneration.from_pretrained(modelo_huggingface).to(device)
+    
+    # 🛠 Se estiver rodando na GPU, converte para FP16 para reduzir memória
+    if torch.cuda.is_available():
+        model.half()
+
+    model.eval()
 
     with torch.no_grad():
-        outputs = model.generate(inputs["input_ids"])
+        outputs = model.generate(inputs["input_ids"], max_length=20, num_beams=3)  # Redução de `max_length` e `num_beams`
 
     sentiment = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    # 🛠 Libera memória após inferência
+    del model
+    torch.cuda.empty_cache()
+
     return sentiment
 
 @app.route("/analyze", methods=["POST"])
@@ -53,4 +64,3 @@ def analyze():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-
