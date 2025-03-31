@@ -3,6 +3,7 @@ from flask_cors import CORS
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 from googletrans import Translator
+import os
 
 app = Flask(__name__)
 CORS(app, resources={r"/analyze": {"origins": "*"}})  # Libera acesso para o frontend
@@ -63,4 +64,5 @@ def analyze():
     return jsonify({"sentiment": sentiment})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

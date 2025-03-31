@@ -3,4 +3,5 @@ flask-cors
 torch
 transformers
 sentencepiece
+gunicorn
 googletrans==4.0.0-rc1
