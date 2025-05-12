@@ -6,6 +6,7 @@ from googletrans import Translator  # type: ignore
 import os
 from db_models import SessionLocal, Registro
 from collections import Counter
+import traceback
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": [
@@ -26,10 +27,9 @@ for modelo_name, tipo in zip(modelos_huggingface, tipos_modelos):
     if tipo == "t5":
         tokenizer = T5Tokenizer.from_pretrained(modelo_name)
         model = T5ForConditionalGeneration.from_pretrained(modelo_name)
-        
+
         if torch.cuda.is_available():
-            model = model.half()
-        
+            model = model.half()  # ou .to(torch.bfloat16) se sua GPU suportar melhor
         model = model.to(device)
         model.eval()
 
@@ -48,29 +48,42 @@ def predict_sentiment(model, tokenizer, text, tipo_modelo):
 
         if tipo_modelo == "t5":
             input_text = f"classify sentiment: {texto_en}"
-            inputs = tokenizer(input_text, return_tensors="pt", max_length=64, truncation=True).to(device)
+            inputs = tokenizer(input_text, return_tensors="pt", max_length=64, truncation=True)
+            input_ids = inputs["input_ids"].to(device)
+            attention_mask = inputs["attention_mask"].to(device)
 
             with torch.no_grad():
                 outputs = model.generate(
-                    inputs["input_ids"],
-                    max_length=10,  # REDUZIDO para economizar memória
-                    num_beams=2     # REDUZIDO para economizar memória
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    max_length=10,
+                    num_beams=2
                 )
 
             sentiment = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-        del inputs
-        del outputs
-        torch.cuda.empty_cache()
+        del inputs, input_ids, attention_mask, outputs
+        if torch.cuda.is_available():
+            with torch.cuda.device(device):
+                torch.cuda.empty_cache()
+                torch.cuda.ipc_collect()
 
         return sentiment
 
     except RuntimeError as e:
         if 'out of memory' in str(e):
-            print("[ERRO] Memória insuficiente na GPU. Forçando limpeza e fallback.")
-            torch.cuda.empty_cache()
+            print("[ERRO] GPU sem memória. Limpando cache.")
+            if torch.cuda.is_available():
+                with torch.cuda.device(device):
+                    torch.cuda.empty_cache()
+                    torch.cuda.ipc_collect()
             return "erro_memoria"
-        raise e  # outros erros continuam sendo lançados
+        else:
+            traceback.print_exc()
+            return "erro_modelo"
+    except Exception:
+        traceback.print_exc()
+        return "erro_modelo"
 
 def calcular_consenso(sentimentos):
     contagem = Counter(sentimentos)
