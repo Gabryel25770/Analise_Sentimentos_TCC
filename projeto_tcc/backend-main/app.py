@@ -38,9 +38,9 @@ for modelo_name, tipo in zip(modelos_huggingface, tipos_modelos):
     if tipo == "t5":
         tokenizer = T5Tokenizer.from_pretrained(modelo_name)
         model = T5ForConditionalGeneration.from_pretrained(modelo_name)
-    else:
-        tokenizer = AutoTokenizer.from_pretrained(modelo_name)
-        model = AutoModelForSequenceClassification.from_pretrained(modelo_name)
+    # else:
+    #     tokenizer = AutoTokenizer.from_pretrained(modelo_name)
+    #     model = AutoModelForSequenceClassification.from_pretrained(modelo_name)
     
     tokenizers.append(tokenizer)
     models.append(model.to(device))
