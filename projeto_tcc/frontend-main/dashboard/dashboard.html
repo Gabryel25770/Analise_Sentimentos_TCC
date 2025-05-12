@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <title>Dashboard Análises</title>
+</head>
+
+<body>
+    <main class="main-content"> 
+        <section class="input-section">
+            <div style="display: flex; flex-direction: row;">
+                <button class="back-button" onclick="navigateTo('../inicial/inicial.html')">
+                    <img src="../assets/arrow_back.png" alt="Ícone para voltar">
+                    Voltar
+                </button>
+                <h1 style="color: white;">Dashboard de Análises</h1>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; height: 90%;">
+                <div class="first_container">
+                    <!-- Gráfico de Pizza -->
+                    <div class="card_pizza">
+                        <h2>Distribuição de Sentimentos</h2>
+                        <canvas id="pizzaChart"></canvas>
+                    </div>
+            
+                    <!-- Tabela de Registros -->
+                    <div class="card_table">
+                        <h2>20 Registros Mais Recentes</h2>
+                        <table id="registrosTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Texto</th>
+                                    <th>Sentimento</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Preenchido pelo JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="second_container">
+                    <!-- Gráfico de Barras -->
+                    <div class="card_bar">
+                        <h2>Análises por Dia</h2>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>         
+        </section>
+    </main>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
