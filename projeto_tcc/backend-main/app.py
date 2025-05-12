@@ -10,7 +10,11 @@ from collections import defaultdict
 
 # --- Flask App ---
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": [
+    "http://127.0.0.1:5500", 
+    "https://frontend-main-orcin.vercel.app"
+]}}, supports_credentials=True)
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
