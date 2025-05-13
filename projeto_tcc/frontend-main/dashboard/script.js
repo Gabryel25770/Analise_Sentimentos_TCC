@@ -5,7 +5,7 @@ function navigateTo(page) {
 async function carregarDashboard() {
     try {
         // Rota que vai fornecer os dados:
-        const resposta = await fetch('https://analisesentimentostcc-production.up.railway.app/dashboard-data');
+        const resposta = await fetch('http://203.57.40.169:10067/dashboard-data');
         const data = await resposta.json();
 
         // --- Atualiza gráfico de pizza ---

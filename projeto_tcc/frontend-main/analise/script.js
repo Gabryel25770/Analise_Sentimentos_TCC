@@ -107,7 +107,7 @@ async function salvarFeedback(event) {
 
     try {
         console.log("entrou no try")
-        const response = await fetch("https://analisesentimentostcc-production.up.railway.app/save", {
+        const response = await fetch("http://203.57.40.169:10067/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: texto, sentiment: sentimentoResposta })
@@ -206,7 +206,7 @@ async function analise(){
     document.getElementById("loading").style.display = 'flex';
 
     try {
-        const response = await fetch('https://analisesentimentostcc-production.up.railway.app/analyze', {
+        const response = await fetch('http://203.57.40.169:10067/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: texto })
