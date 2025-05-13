@@ -107,7 +107,7 @@ async function salvarFeedback(event) {
 
     try {
         console.log("entrou no try")
-        const response = await fetch("http://203.57.40.169:10067/save", {
+        const response = await fetch("https://api.analisefeedback.com.br/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: texto, sentiment: sentimentoResposta })
@@ -206,7 +206,7 @@ async function analise(){
     document.getElementById("loading").style.display = 'flex';
 
     try {
-        const response = await fetch('http://203.57.40.169:10067/analyze', {
+        const response = await fetch('https://api.analisefeedback.com.br/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: texto })
