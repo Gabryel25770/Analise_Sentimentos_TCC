@@ -130,7 +130,51 @@ def save():
 
 @app.route("/dashboard-data", methods=["GET"])
 def dashboard_data():
-    return jsonify({"message": "Rota ainda em construção."})
+    db = SessionLocal()
+    
+    # 1. Busca todos os registros
+    registros = db.query(Registro).order_by(desc(Registro.data_criacao)).limit(20).all()
+
+    # 2. Distribuição de sentimentos (contagem)
+    sentimentos_contagem = db.query(
+        Registro.sentimento, func.count(Registro.sentimento)
+    ).group_by(Registro.sentimento).all()
+
+    sentimentos = {
+        "labels": [sentimento for sentimento, _ in sentimentos_contagem],
+        "data": [count for _, count in sentimentos_contagem]
+    }
+
+    # 3. Análises por dia
+    analises_por_dia = db.query(
+        func.date(Registro.data_criacao), func.count(Registro.id)
+    ).group_by(func.date(Registro.data_criacao)).order_by(func.date(Registro.data_criacao)).all()
+
+    analises = {
+        "labels": [str(data) for data, _ in analises_por_dia],
+        "data": [count for _, count in analises_por_dia]
+    }
+
+    # 4. Registros para preencher a tabela
+    registros_serializados = [{
+        "id": r.id,
+        "texto": r.texto,
+        "sentimento": r.sentimento,
+        "data_criacao": r.data_criacao.isoformat()
+    } for r in registros]
+
+    db.close()
+
+    return jsonify({
+        "sentimentos": sentimentos,
+        "analisesPorDia": analises,
+        "registros": registros_serializados
+    })
+
+
+# @app.route("/dashboard-data", methods=["GET"])
+# def dashboard_data():
+#     return jsonify({"message": "Rota ainda em construção."})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
