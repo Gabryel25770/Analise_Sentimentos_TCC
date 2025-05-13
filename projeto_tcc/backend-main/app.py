@@ -9,7 +9,7 @@ from sqlalchemy import func, desc
 from collections import defaultdict
 
 # --- Flask App ---
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": [
     "http://127.0.0.1:5500", 
     "https://frontend-main-orcin.vercel.app"
@@ -210,6 +210,6 @@ def dashboard_data():
     })
 
 # --- Início ---
-if _name_ == "_main_":
+if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
