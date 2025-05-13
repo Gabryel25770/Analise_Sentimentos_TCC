@@ -1,95 +1,128 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import torch
-from transformers import T5Tokenizer, T5ForConditionalGeneration
-from googletrans import Translator  # type: ignore
+from transformers import T5Tokenizer, T5ForConditionalGeneration, AutoTokenizer, AutoModelForSequenceClassification
+from googletrans import Translator # type: ignore
 import os
 from db_models import SessionLocal, Registro
-from collections import Counter
-import traceback
+from sqlalchemy import func, desc
+from collections import defaultdict
 
-app = Flask(__name__)
+# --- Flask App ---
+app = Flask(_name_)
 CORS(app, resources={r"/*": {"origins": [
-    "http://127.0.0.1:5500",
+    "http://127.0.0.1:5500", 
     "https://frontend-main-orcin.vercel.app"
 ]}}, supports_credentials=True)
 
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-modelos_huggingface = ["GABRYEL25770/TrainedModel"]
-tipos_modelos = ["t5"]
+# --- Modelo HuggingFace ---
+modelos_huggingface = [
+    "GABRYEL25770/TrainedModel"     # T5
+    # ,"GABRYEL25770/DistilBERT_Model_TCC"  # DistilBERT
+    # ,"GABRYEL25770/RoBERTa_Model_TCC"      # RoBERTa
+]
+
+tipos_modelos = [
+    "t5",
+    "bert",
+    "bert"
+]
 
 tokenizers = []
 models = []
 
-# Carrega modelo e aplica .half() se disponível
 for modelo_name, tipo in zip(modelos_huggingface, tipos_modelos):
     if tipo == "t5":
         tokenizer = T5Tokenizer.from_pretrained(modelo_name)
         model = T5ForConditionalGeneration.from_pretrained(modelo_name)
+    # else:
+    #     tokenizer = AutoTokenizer.from_pretrained(modelo_name)
+    #     model = AutoModelForSequenceClassification.from_pretrained(modelo_name)
+    
+    tokenizers.append(tokenizer)
+    models.append(model.to(device))
+    model.eval()
 
-        if torch.cuda.is_available():
-            model = model.half()  # ou .to(torch.bfloat16) se sua GPU suportar melhor
-        model = model.to(device)
-        model.eval()
-
-        tokenizers.append(tokenizer)
-        models.append(model)
-
+# --- Tradutor ---
 translator = Translator()
 
+# --- Funções ---
 def traduzir_para_ingles(texto_pt):
     traducao = translator.translate(texto_pt, src='pt', dest='en')
     return traducao.text
 
 def predict_sentiment(model, tokenizer, text, tipo_modelo):
-    try:
-        texto_en = traduzir_para_ingles(text)
+    texto_en = traduzir_para_ingles(text)
 
-        if tipo_modelo == "t5":
-            input_text = f"classify sentiment: {texto_en}"
-            inputs = tokenizer(input_text, return_tensors="pt", max_length=64, truncation=True)
-            input_ids = inputs["input_ids"].to(device)
-            attention_mask = inputs["attention_mask"].to(device)
+    if tipo_modelo == "t5":
+        input_text = f"classify sentiment: {texto_en}"
+        inputs = tokenizer(input_text, return_tensors="pt", max_length=64, truncation=True).to(device)
 
-            with torch.no_grad():
-                outputs = model.generate(
-                    input_ids=input_ids,
-                    attention_mask=attention_mask,
-                    max_length=10,
-                    num_beams=2
-                )
-
-            sentiment = tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-        del inputs, input_ids, attention_mask, outputs
         if torch.cuda.is_available():
-            with torch.cuda.device(device):
-                torch.cuda.empty_cache()
-                torch.cuda.ipc_collect()
+            model.half()
 
-        return sentiment
+        with torch.no_grad():
+            outputs = model.generate(inputs["input_ids"], max_length=20, num_beams=3)
 
-    except RuntimeError as e:
-        if 'out of memory' in str(e):
-            print("[ERRO] GPU sem memória. Limpando cache.")
-            if torch.cuda.is_available():
-                with torch.cuda.device(device):
-                    torch.cuda.empty_cache()
-                    torch.cuda.ipc_collect()
-            return "erro_memoria"
-        else:
-            traceback.print_exc()
-            return "erro_modelo"
-    except Exception:
-        traceback.print_exc()
-        return "erro_modelo"
+        sentiment = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    else:
+        inputs = tokenizer(texto_en, return_tensors="pt", max_length=512, truncation=True).to(device)
+
+        if torch.cuda.is_available():
+            model.half()
+
+        with torch.no_grad():
+            outputs = model(**inputs)
+        
+        logits = outputs.logits
+        predicted_class_id = logits.argmax().item()
+        
+        # Mapeia o id para o sentimento
+        label_mapping = {
+            0: "negative",
+            1: "neutral",
+            2: "positive"
+        }
+        sentiment = label_mapping.get(predicted_class_id, "desconhecido")
+
+    torch.cuda.empty_cache()
+    return sentiment
 
 def calcular_consenso(sentimentos):
+    """Retorna o sentimento mais votado entre os três modelos"""
+    from collections import Counter
     contagem = Counter(sentimentos)
     consenso = contagem.most_common(1)[0][0]
     return consenso
 
+
+# def predict_sentiment(text):
+#     texto_en = traduzir_para_ingles(text)
+
+#     input_text = f"classify sentiment: {texto_en}"
+#     inputs = tokenizer(input_text, return_tensors="pt", max_length=64, truncation=True).to(device)
+
+#     model = T5ForConditionalGeneration.from_pretrained(modelo_huggingface).to(device)
+
+#     if torch.cuda.is_available():
+#         model.half()
+
+#     model.eval()
+#     with torch.no_grad():
+#         outputs = model.generate(inputs["input_ids"], max_length=20, num_beams=3)
+
+#     sentiment = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+#     del model
+#     torch.cuda.empty_cache()
+
+#     return sentiment
+
+# --- Rota principal ---
 @app.route("/analyze", methods=["POST"])
 def analyze():
     data = request.json
@@ -97,22 +130,27 @@ def analyze():
 
     if not user_text:
         return jsonify({"error": "Texto vazio"}), 400
-
+    
     resultados = []
-
+    
     for model, tokenizer, tipo in zip(models, tokenizers, tipos_modelos):
         sentimento = predict_sentiment(model, tokenizer, user_text, tipo)
         resultados.append(sentimento)
 
+    #consenso = calcular_consenso(resultados)
+
     return jsonify({
-        "modelo_t5": resultados[0]
+        #"consenso": consenso,
+        "modelo_t5": resultados[0]  # T5
+        #,"modelo_distilbert": resultados[1]  # DistilBERT
+        #,"modelo_roberta": resultados[2]   # RoBERTa
     })
 
 @app.route("/save", methods=["POST", "OPTIONS"])
 def save():
     if request.method == "OPTIONS":
-        return '', 200
-
+        return '', 200  # responde ao preflight
+    
     data = request.json
     texto = data.get("text", "")
     sentimento = data.get("sentiment", "")
@@ -171,10 +209,7 @@ def dashboard_data():
         "registros": registros_serializados
     })
 
-
-# @app.route("/dashboard-data", methods=["GET"])
-# def dashboard_data():
-#     return jsonify({"message": "Rota ainda em construção."})
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+# --- Início ---
+if _name_ == "_main_":
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
