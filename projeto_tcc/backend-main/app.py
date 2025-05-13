@@ -131,3 +131,6 @@ def save():
 @app.route("/dashboard-data", methods=["GET"])
 def dashboard_data():
     return jsonify({"message": "Rota ainda em construção."})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
