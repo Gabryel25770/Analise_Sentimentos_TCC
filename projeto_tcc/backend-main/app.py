@@ -12,7 +12,8 @@ from collections import defaultdict
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": [
     "http://127.0.0.1:5500", 
-    "https://frontend-main-orcin.vercel.app"
+    "https://frontend-main-orcin.vercel.app",
+    "https://analisefeedback.com.br"
 ]}}, supports_credentials=True)
 
 
