@@ -6,7 +6,7 @@ function navigateTo(page) {
 
 async function carregarDashboard() {
     try {
-        const resposta = await fetch('https://api.analisefeedback.com.br:5000/dashboard-data');
+        const resposta = await fetch('https://api.analisefeedback.com.br/dashboard-data');
         const data = await resposta.json();
 
         // --- Atualiza gráfico de pizza ---

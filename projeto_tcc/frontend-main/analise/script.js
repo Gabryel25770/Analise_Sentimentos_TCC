@@ -113,7 +113,7 @@ async function salvarFeedback() {
 
     try {
         console.log("entrou no try")
-        const response = await fetch("https://api.analisefeedback.com.br:5000/save", {
+        const response = await fetch("https://api.analisefeedback.com.br/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: texto, sentiment: sentimentoResposta, sentiment_model: sentimentoModelo})
@@ -212,7 +212,7 @@ async function analise(){
     document.getElementById("loading").style.display = 'flex';
 
     try {
-        const response = await fetch('https://api.analisefeedback.com.br:5000/analyze', {
+        const response = await fetch('https://api.analisefeedback.com.br/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: texto })
