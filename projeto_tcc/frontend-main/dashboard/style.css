@@ -134,7 +134,8 @@ canvas {
   gap: 3rem;
 }
 
-#pizzaChart{
+#pizzaChart,
+#pizzaChart2{
   width: auto !important;
   height: 90% !important;
 }
