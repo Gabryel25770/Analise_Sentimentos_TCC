@@ -164,7 +164,7 @@ def save():
         return jsonify({"error": "Texto e sentimento são obrigatórios."}), 400
 
     db = SessionLocal()
-    agora_ajustado = datetime.now()
+    agora_ajustado = datetime.now() - timedelta(hours=3)
     novo_registro = Registro(
         texto=texto,
         sentimento=sentimento,
