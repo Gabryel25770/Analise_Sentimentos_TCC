@@ -1,13 +1,11 @@
 :root {
-    --color-primary: #b324b8;
-    --color-secondary: #FFF9EB;
-    --color-tertiary: #C4C4C4;
-    --color-button: #fe652b;
-    --color-button-hover: #e55720;
-    --color-text: #444444;
-    --color-white: #FFFFFF;
-    --color-button-close: #979797;
-    --color-button-close-hover: #6e6e6e;
+  --color-primary: #1D3557;     /* Azul escuro institucional */
+  --color-secondary: #e7e8d9;   /* Branco gelo (fundo claro) */
+  --color-accent: #E63946;      /* Vermelho suave para destaque */
+  --color-button: #457B9D;      /* Azul médio para botões */
+  --color-button-hover: #1D3557; /* Mesmo azul escuro do header */
+  --color-text: #343A40;        /* Cinza escuro para legibilidade */
+  --color-white: #FFFFFF;
 }
 
 /* Reseta algumas configurações padrão */
@@ -19,52 +17,80 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background: url('assets/stacked-waves-haikei.svg') no-repeat center center;
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
+.main_content {
+  height: 100%;
+  width:100%;
+}
+
+.input_section {
+  height: 100%;
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
-  width: 80%;
-  max-width: 900px;
-  background-color: white;
-  padding: 20px;
+  width: 70%;
+  height: 50%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  background-color: #e7e8d9;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 header {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 1rem;
+  width: 100%;
   text-align: center;
-  margin-bottom: 30px;
+  border-radius: 8px 8px 0 0;
 }
 
 h1 {
-  font-size: 2.5rem;
-  color: #333;
+  font-family: "Oswald", sans-serif;
+  font-size: 3.5rem;
+  color: #fff;
 }
 
 .buttons {
   display: flex;
+  width: 100%;
+  padding: 10px;
   justify-content: space-around;
   margin-bottom: 30px;
+  flex-grow: 1;
+  align-items: center;
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
+  padding: 12px 24px;
+  font-size: 2rem;
+  width: 17rem;
+  height: 5rem;
+  background-color: var(--color-button);
+  color: var(--color-white);
   border: none;
-  border-radius: 5px;
-  background-color: #4CAF50;
-  color: white;
-  transition: background-color 0.3s;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: var(--color-button-hover);
 }
+
 
 .content {
   text-align: center;
@@ -72,5 +98,27 @@ button:hover {
 
 .content p {
   font-size: 1.2rem;
-  color: #555;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    height: auto;
+  }
+
+  .buttons {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  button {
+    width: 100%;
+  }
 }

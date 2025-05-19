@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration, AutoTokenizer, AutoModelForSequenceClassification
@@ -7,12 +7,14 @@ import os
 from db_models import SessionLocal, Registro
 from sqlalchemy import func, desc
 from collections import defaultdict
+from datetime import datetime, timedelta
 
 # --- Flask App ---
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": [
     "http://127.0.0.1:5500", 
-    "https://frontend-main-orcin.vercel.app"
+    "https://frontend-main-orcin.vercel.app",
+    "https://analisefeedback.com.br"
 ]}}, supports_credentials=True)
 
 
@@ -149,17 +151,26 @@ def analyze():
 @app.route("/save", methods=["POST", "OPTIONS"])
 def save():
     if request.method == "OPTIONS":
-        return '', 200  # responde ao preflight
-    
+        response = make_response()
+        response.headers['Content-Type'] = 'application/json'
+        return jsonify({}), 200
+
     data = request.json
     texto = data.get("text", "")
     sentimento = data.get("sentiment", "")
+    sentimento_modelo = data.get("sentiment_model", "")
 
     if not texto or not sentimento:
         return jsonify({"error": "Texto e sentimento são obrigatórios."}), 400
 
     db = SessionLocal()
-    novo_registro = Registro(texto=texto, sentimento=sentimento)
+    agora_ajustado = datetime.now()
+    novo_registro = Registro(
+        texto=texto,
+        sentimento=sentimento,
+        sentimento_modelo=sentimento_modelo,
+        data_criacao=agora_ajustado  # <-- ajuste aplicado aqui
+    )
     db.add(novo_registro)
     db.commit()
     db.close()
@@ -171,7 +182,7 @@ def dashboard_data():
     db = SessionLocal()
     
     # 1. Busca todos os registros
-    registros = db.query(Registro).order_by(desc(Registro.data_criacao)).limit(20).all()
+    registros = db.query(Registro).order_by(desc(Registro.data_criacao)).limit(10).all()
 
     # 2. Distribuição de sentimentos (contagem)
     sentimentos_contagem = db.query(
@@ -183,14 +194,39 @@ def dashboard_data():
         "data": [count for _, count in sentimentos_contagem]
     }
 
-    # 3. Análises por dia
-    analises_por_dia = db.query(
-        func.date(Registro.data_criacao), func.count(Registro.id)
-    ).group_by(func.date(Registro.data_criacao)).order_by(func.date(Registro.data_criacao)).all()
+    # 2.2 Distribuição de sentimentos (contagem)
+    sentimentos_modelo_contagem = db.query(
+        Registro.sentimento_modelo, func.count(Registro.sentimento_modelo)
+    ).group_by(Registro.sentimento_modelo).all()
+
+    sentimentos_modelo = {
+        "labels": [sentimento_modelo for sentimento_modelo, _ in sentimentos_modelo_contagem],
+        "data": [count for _, count in sentimentos_modelo_contagem]
+    }
+
+    # 3. Análises por dia e por sentimento
+    analises_dict = defaultdict(lambda: {"positivo": 0, "negativo": 0, "neutro": 0})
+
+    registros_por_dia = db.query(
+        func.date(Registro.data_criacao).label("data"),
+        Registro.sentimento,
+        func.count(Registro.id)
+    ).group_by("data", Registro.sentimento).order_by("data").all()
+
+    for data, sentimento, count in registros_por_dia:
+        analises_dict[str(data)][sentimento] = count
+
+    # Organiza em listas para o gráfico
+    labels = sorted(analises_dict.keys())
+    positivos = [analises_dict[date]["positivo"] for date in labels]
+    negativos = [analises_dict[date]["negativo"] for date in labels]
+    neutros   = [analises_dict[date]["neutro"]   for date in labels]
 
     analises = {
-        "labels": [str(data) for data, _ in analises_por_dia],
-        "data": [count for _, count in analises_por_dia]
+        "labels": labels,
+        "positivo": positivos,
+        "negativo": negativos,
+        "neutro": neutros
     }
 
     # 4. Registros para preencher a tabela
@@ -205,6 +241,7 @@ def dashboard_data():
 
     return jsonify({
         "sentimentos": sentimentos,
+        "sentimentos_modelo": sentimentos_modelo,
         "analisesPorDia": analises,
         "registros": registros_serializados
     })

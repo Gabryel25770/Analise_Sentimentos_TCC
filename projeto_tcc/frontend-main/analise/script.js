@@ -1,5 +1,6 @@
 
 var sentimentoResposta;
+var sentimentoModelo;
 
 function limparTexto(){
     document.getElementById("campotext").value = "";
@@ -10,9 +11,14 @@ function abrirPopup() {
 }
 
   // Função para fechar o popup
-function fecharPopup(event) {
+async function fecharPopup(event) {
+    event.preventDefault();
     document.getElementById('popup').style.display = 'none';
-    salvarFeedback(event);
+     const sucesso = await salvarFeedback(); // remove o 'event' pois não é mais usado
+
+    if (sucesso) {
+        abrirAlertSavedText();
+    }
 }
 
 function abrirAlertNoText() {
@@ -93,8 +99,8 @@ function fecharAlertSavedText() {
     }, 500); 
 }
 
-async function salvarFeedback(event) {
-    event.preventDefault();
+async function salvarFeedback() {
+    //event.preventDefault();
     const texto = document.getElementById("campotext").value;
     sentimentoResposta = sentimentoResposta.toLowerCase();
 
@@ -107,10 +113,10 @@ async function salvarFeedback(event) {
 
     try {
         console.log("entrou no try")
-        const response = await fetch("https://api.analisefeedback.com.br/save", {
+        const response = await fetch("http://127.0.0.1:5000/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: texto, sentiment: sentimentoResposta })
+            body: JSON.stringify({ text: texto, sentiment: sentimentoResposta, sentiment_model: sentimentoModelo})
         });
 
         const data = await response.json();
@@ -206,7 +212,7 @@ async function analise(){
     document.getElementById("loading").style.display = 'flex';
 
     try {
-        const response = await fetch('https://api.analisefeedback.com.br/analyze', {
+        const response = await fetch('http://127.0.0.1:5000/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: texto })
@@ -247,7 +253,9 @@ async function analise(){
 
         sentimentoResposta = '';
         sentimentoResposta = sentimento
-        
+        sentimentoModelo = sentimento
+
+        document.getElementById("texto_revisao").innerHTML = `"${texto}"`;
 
         document.getElementById("div-sim-nao").style.display = `flex`;
         document.getElementById("div-options").style.display = `none`;

@@ -1,116 +1,242 @@
 :root {
-    --color-primary: #b324b8;
-    --color-secondary: #FFF9EB;
-    --color-tertiary: #C4C4C4;
-    --color-button: #fe652b;
-    --color-button-hover: #e55720;
-    --color-text: #444444;
-    --color-white: #FFFFFF;
-    --color-button-close: #979797;
-    --color-button-close-hover: #6e6e6e;
+  --color-primary: #1D3557;
+  --color-secondary: #e7e8d9;
+  --color-accent: #E63946;
+  --color-button: #457B9D;
+  --color-button-hover: #1D3557;
+  --color-text: #343A40;
+  --color-white: #FFFFFF;
 }
 
-html, body{
-  background-color: var(--color-primary);
-  height: 100%;
-  margin: 0; /* Remove a margem */
-  padding: 0; /* Remove o padding */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: url('../assets/wave-haikei2.svg') no-repeat center center;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  color: var(--color-text);
   display: flex;
   flex-direction: column;
+}
+
+.main-content {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.input-section {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+  height: 10%;
+  gap: 1rem;
+}
+
+.header-container h1 {
+  color: white;
+  font-family: "Oswald", sans-serif;
+  margin: 0;
+  font-size: 3rem;
 }
 
 .back-button {
   display: flex;
   align-items: center;
   background-color: transparent;
-  color: white;
+  color: var(--color-white);
   border: none;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 1.5rem;
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
-.main-content{
+
+.body-container {
+  display: flex;
+  flex-direction: row;
+  height: 90%;
+  gap: 1rem;
+}
+
+.div_pizzas{
+  display: flex;
+  flex-direction: row;
+  height: 50%;
+  gap: 1rem;
+}
+
+.first_container,
+.second_container {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  gap: 1rem;
   height: 100%;
 }
 
-canvas {
-  display: flex !important;
-  width: 50% !important;  /* Garante que o canvas ocupe toda a largura do contêiner */
-  height: 50% !important;
-  flex-grow: 1 !important; /* Ajusta a altura para manter a proporção */
-}
-.input-section{
-  width: 100%;
-  flex-grow: 1;
-  padding: 0;
-}
-
 .first_container{
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  width: 100%;
-  height: 50%;
+  width: 60%;
 }
 
 .second_container{
-  width: 100%;
+  width: 40%;
+}
+
+.card {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+.card h2 {
+  color: var(--color-primary);
+  font-family: "Oswald", sans-serif;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+canvas {
+  width: auto;
+  height: 60%;
+}
+
+.card_pizza{
+  height: 100%;
+  width: 50%;
+}
+
+.card_bar{
   height: 50%;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+.card_bar,
+.card_table{
+  gap: 3rem;
 }
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-}
-.card_pizza {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  width: 50%;
-  flex-direction: column;
-  display: flex;
-  align-items: center;
-}
-.card_table {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  width: 50%;
-  flex-direction: column;
-  display: flex;
-  align-items: center;
-}
-.card_bar {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  flex-direction: column;
-  display: flex;
-  align-items: center;
 
+#pizzaChart{
+  width: auto !important;
+  height: 90% !important;
 }
+
+#barChart{
+  width: 100% !important;
+  height: auto !important;
+  max-height: 300px;
+}
+
+.card_table {
+  height: 100%;
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
+  font-size: 1.2rem;
 }
+
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
 }
+
 th {
-  background-color: #4CAF50;
+  background-color: var(--color-primary);
   color: white;
+}
+
+@media (max-width: 768px) {
+  body {
+    height: auto;
+  }
+
+  .body-container {
+    flex-direction: column;
+    gap: 1rem;
+    height: auto;
+  }
+
+  .first_container,
+  .second_container {
+    width: 100%;
+    height: auto;
+  }
+
+  .div_pizzas{
+    flex-direction: column;
+  }
+
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 10px;
+  }
+
+  .header-container h1 {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+
+  .back-button {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .card {
+    padding: 15px;
+    gap: 0.5rem;
+  }
+
+  .card h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 200px;
+  }
+
+  .card_pizza,
+  .card_bar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .card_table {
+    height: auto;
+    overflow-x: auto;
+  }
+
+  #registrosTable {
+    font-size: 0.8rem;
+  }
+
+  th, td {
+    padding: 5px;
+  }
 }

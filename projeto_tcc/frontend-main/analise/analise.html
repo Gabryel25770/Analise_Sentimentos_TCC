@@ -8,18 +8,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <title>Análise de Sentimentos</title>
 </head>
 
 <body>
     <main class="main-content">
         <header class="header-banner">
-            <div style="display: flex; flex-direction: column; justify-content: left; align-items: start; height: 100%; width: 100%">
-                <button class="back-button" onclick="navigateTo('/index.html')">
+            <div class="header-flex-column">
+                <button class="back-button" onclick="navigateTo('../index.html')">
                     <img src="../assets/arrow_back.png" alt="Ícone para voltar">
                     Voltar
                 </button>
-                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; height: 90%; width:100%">
+                <div class="header-flex-row">
                     <h1 class="main-title">Análise de Sentimentos</h1>
                     <img id="mainImage" src="../assets/sentimental-analysis.png">
                 </div>  
@@ -29,7 +30,7 @@
         <section class="input-section">
             <h2 class="section-title">O que está achando da universidade?</h2>
             <div class="input-wrapper">
-                <textarea type="text" id="campotext" class="input-name" rows="4" maxlength="260" placeholder="Digite aqui..."></textarea>
+                <textarea type="text" id="campotext" class="input-name" rows="4" maxlength="260" placeholder="Digite aqui..." autofocus></textarea>
                 <button id="buttonLimpar" type="button" onclick="limparTexto()">
                     <span class="texto-rotacionado">Limpar</span>
                 </button>
@@ -46,39 +47,48 @@
 
     <!-- POPUP -->
     <div id="popup" class="popup-background">
-        <div style="display: flex; align-items: center;" class="popup-content">
+        <div class="popup-content popup-align-center">
             <div id="header-popup" class="header-popup">
-                <div style="width: 100%; display: flex; justify-content: end; padding-right: 10px;">
+                <h3 class="title-popup">Resultado da Análise</h3>
+                <div class="popup-header-close">
                     <button class="button_close_x" type="button" onclick="fecharPopup(event)">×</button>
                 </div>
-                <h3 class="title-popup">Resultado da Análise</h3>
             </div>
-            <div style="height: 60%; display: flex; flex-direction: row; width: 100%; align-items: center; padding-top: 10px;">
-                <div style="width: 50%">
+            <div class="popup-body">
+                <div class="popup-image-container">
                     <img id="imageFeedback" alt="Imagem representativa para o feedback">
                 </div>
                 <div class="vertical-line"></div>
-                <div style="width: 50%">
-                    <p>O sentimento detectado foi:</p>
-                    <p style="font-size: 38px;" id="responseText"><strong>Positivo</strong></p>
+                <div class="popup-result-text">
+                    <div class="popup-result-show">
+                        <p>O sentimento detectado foi:</p>
+                        <p id="responseText"><strong>Positivo</strong></p>
+                    </div>
+                    <div class="popup-revisao">
+                        <p>Esse foi o texto analisado:</p>
+                        <p id="texto_revisao"></p>
+                    </div> 
                 </div>               
             </div>
-            <div style="width: 100%; height: 25%; padding: 10px">
-                <div style="display: flex; flex-direction: column; border: 1px solid; border-radius: 12px; background-color: #fff; height: 100%; width: 100%;">
-                    <p id="pergunta-popup" style="font-size: 20px !important;">string</p>
-                    <div id="div-sim-nao" style="display: flex; flex-grow: 1; flex-direction: row; width: 100%; justify-content: center; align-items: center; gap: 150px">
+            <div class="popup-footer">
+                <div class="popup-feedback-box">
+                    <p id="pergunta-popup">string</p>
+
+                    <div id="div-sim-nao" class="popup-buttons-yes-no">
                         <button id="button-sim" type="button" onclick="clickYes()">Sim</button>
                         <button id="button-nao" type="button" onclick="clickNo()">Não</button>
                     </div>
 
-                    <div id="div-options" style="display: none; flex-grow: 1; flex-direction: row; width: 100%; justify-content: center; align-items: center; gap: 10%">
+                    <div id="div-options" class="popup-options-buttons">
                         <button class="button-options" type="button" id="button-positive" onclick="clickPos()">Positivo</button>
                         <button class="button-options" type="button" id="button-negative" onclick="clickNeg()">Negativo</button>
                         <button class="button-options" type="button" id="button-neutral" onclick="clickNtl()">Neutro</button>
                     </div>
 
-                    <div id="div-success" style="display: none; flex-grow: 1; flex-direction: row; width: 100%; justify-content: center; align-items: center; gap: 150px">
-                        <img id="imageCheckSuccess" style="height: 50px;" src="../assets/check.png" alt="Imagem de sucesso" onclick="fecharPopup(event)">
+                    <div id="div-success" class="popup-success">
+                        <button type="button" onclick="fecharPopup(event)" class="button-to-success">
+                            <img id="imageCheckSuccess" src="../assets/check.png" alt="Imagem de sucesso">
+                        </button>
                     </div>
                 </div>
             </div>
@@ -108,7 +118,7 @@
 
     <div id="loading" class="loading-overlay">
         <div class="loading-spinner">
-            <p style="margin-bottom: 30%;">Analisando...</p>
+            <p>Analisando...</p>
         </div>
     </div>
 

@@ -8,101 +8,41 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <title>Análise de Sentimentos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Sobre o Projeto</title>
 </head>
 
 <body>
-    <main class="main-content">
-        <header class="header-banner">
-            <h1 class="main-title">Análise de Sentimentos</h1>
-            <img id="mainImage" src="../assets/sentimental-analysis.png" alt="Imagem representativa de amigo secreto">
-        </header>
-        
-        <section class="input-section">
-            <h2 class="section-title">O que está achando da universidade?</h2>
-            <div class="input-wrapper">
-                <textarea type="text" id="campotext" class="input-name" rows="4" maxlength="260" placeholder="Digite aqui..."></textarea>
-                <button id="buttonLimpar" type="button" onclick="limparTexto()">
-                    <span class="texto-rotacionado">Limpar</span>
-                </button>
-            </div>
+    <main class="main_content">
+        <div class="header-container">
+            <button class="back-button" onclick="navigateTo('../index.html')">
+                <img src="../assets/arrow_back.png" alt="Ícone para voltar">
+                Voltar
+            </button>
+        </div>
+        <section class="input_section">        
+            <div class="container">
+                <header>
+                    <h1>Sobre</h1>
+                    <p>Um overview sobre o nosso projeto</p>
+                </header>
 
-            <div class="button-container">
-                <button class="button-reset" type="button" onclick="analise()" aria-label="Sortear amigo secreto">
-                    <img src="../assets/play_circle_outline.png" alt="Ícone para sortear">
-                    Realizar Análise
-                </button>
+                <div class="texto_resumo">
+                    <p>Este Trabalho de Conclusão de Curso tem como objetivo analisar textos por meio de técnicas de Processamento de Linguagem Natural (PLN), classificando-os em categorias de sentimento: positivo, negativo ou neutro. Para a realização do estudo, foram selecionados e comparados quatro modelos de linguagem baseados em aprendizado profundo: T5 Large, BERT, RoBERTa e DistilBERT. Após o processo de treinamento e avaliação, o modelo T5 demonstrou a melhor acurácia, sendo identificado como o mais eficaz para a tarefa de classificação de sentimentos. A solução proposta apresenta aplicabilidade em diferentes áreas que demandam a interpretação automatizada de grandes volumes de dados textuais, como marketing, análise de redes sociais, educação e atendimento ao consumidor.</p>
+                </div>
+
+                <div class="texto_devs">
+                    <h3>Desenvolvedores</h3>
+                    <p>Gabryel Lourenço Maciel de Morais</p>
+                    <p>Giovanna Borges Tamagnini</p>
+                    <p>Thiago Ayres Kimura</p>
+
+                    <h3>Orientador</h3>
+                    <p>Danilo Perico</p>
+                </div>
             </div>
         </section>
     </main>
-
-    <!-- POPUP -->
-    <div id="popup" class="popup-background">
-        <div style="display: flex; align-items: center;" class="popup-content">
-            <div id="header-popup" class="header-popup">
-                <div style="width: 100%; display: flex; justify-content: end; padding-right: 10px;">
-                    <button class="button_close_x" type="button" onclick="fecharPopup(event)">×</button>
-                </div>
-                <h3 class="title-popup">Resultado da Análise</h3>
-            </div>
-            <div style="height: 60%; display: flex; flex-direction: row; width: 100%; align-items: center; padding-top: 10px;">
-                <div style="width: 50%">
-                    <img id="imageFeedback" alt="Imagem representativa para o feedback">
-                </div>
-                <div class="vertical-line"></div>
-                <div style="width: 50%">
-                    <p>O sentimento detectado foi:</p>
-                    <p style="font-size: 38px;" id="responseText"><strong>Positivo</strong></p>
-                </div>               
-            </div>
-            <div style="width: 100%; height: 25%; padding: 10px">
-                <div style="display: flex; flex-direction: column; border: 1px solid; border-radius: 12px; background-color: #fff; height: 100%; width: 100%;">
-                    <p id="pergunta-popup" style="font-size: 20px !important;">string</p>
-                    <div id="div-sim-nao" style="display: flex; flex-grow: 1; flex-direction: row; width: 100%; justify-content: center; align-items: center; gap: 150px">
-                        <button id="button-sim" type="button" onclick="clickYes()">Sim</button>
-                        <button id="button-nao" type="button" onclick="clickNo()">Não</button>
-                    </div>
-
-                    <div id="div-options" style="display: none; flex-grow: 1; flex-direction: row; width: 100%; justify-content: center; align-items: center; gap: 10%">
-                        <button class="button-options" type="button" id="button-positive" onclick="clickPos()">Positivo</button>
-                        <button class="button-options" type="button" id="button-negative" onclick="clickNeg()">Negativo</button>
-                        <button class="button-options" type="button" id="button-neutral" onclick="clickNtl()">Neutro</button>
-                    </div>
-
-                    <div id="div-success" style="display: none; flex-grow: 1; flex-direction: row; width: 100%; justify-content: center; align-items: center; gap: 150px">
-                        <img id="imageCheckSuccess" style="height: 50px;" src="../assets/check.png" alt="Imagem de sucesso" onclick="fecharPopup(event)">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="alert">
-        <div class="alertbox">
-            <span class="closebtn" onclick="fecharAlertNoText()">&times;</span>
-            Digite algo para ser analisado.
-        </div>
-    </div>
-
-    <div class="alert_notEnough">
-        <div class="alertbox_notEnough">
-            <span class="closebtn_notEnough" onclick="fecharAlertNotEnough()">&times;</span>
-            Digite mais texto, para que a análise seja possível.
-        </div>
-    </div>
-
-    <div class="alert_savedText">
-        <div class="alertbox_savedText">
-            <span class="closebtn_savedText" onclick="fecharAlertSavedText()">&times;</span>
-            Registro salvo com sucesso na base de dados!
-        </div>
-    </div>
-
-    <div id="loading" class="loading-overlay">
-        <div class="loading-spinner">
-            <p style="margin-bottom: 30%;">Analisando...</p>
-        </div>
-    </div>
 
     <script src="script.js" defer></script>
 </body>

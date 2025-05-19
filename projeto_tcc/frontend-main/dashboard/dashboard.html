@@ -15,29 +15,43 @@
 <body>
     <main class="main-content"> 
         <section class="input-section">
-            <div style="display: flex; flex-direction: row;">
-                <button class="back-button" onclick="navigateTo('/index.html')">
+            <div class="header-container">
+                <button class="back-button" onclick="navigateTo('../index.html')">
                     <img src="../assets/arrow_back.png" alt="Ícone para voltar">
                     Voltar
                 </button>
-                <h1 style="color: white;">Dashboard de Análises</h1>
+                <h1>Dashboard de Análises</h1>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 10px; height: 90%;">
+            <div class="body-container">
                 <div class="first_container">
                     <!-- Gráfico de Pizza -->
-                    <div class="card_pizza">
-                        <h2>Distribuição de Sentimentos</h2>
-                        <canvas id="pizzaChart"></canvas>
+                    <div class="div_pizzas">
+                        <div class="card card_pizza">
+                            <h2>Distribuição de Resultados (Real)</h2>
+                            <canvas id="pizzaChart"></canvas>
+                        </div>
+
+                        <div class="card card_pizza">
+                            <h2>Distribuição de Resultados (Modelo)</h2>
+                            <canvas id="pizzaChart2"></canvas>
+                        </div>
                     </div>
-            
+                    
+                    <!-- Gráfico de Barras -->
+                    <div class="card card_bar">
+                        <h2>Análises por Dia</h2>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="second_container">
                     <!-- Tabela de Registros -->
-                    <div class="card_table">
-                        <h2>20 Registros Mais Recentes</h2>
+                    <div class="card card_table">
+                        <h2>10 Registros Mais Recentes</h2>
                         <table id="registrosTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Texto</th>
                                     <th>Sentimento</th>
                                     <th>Data</th>
@@ -49,18 +63,12 @@
                         </table>
                     </div>
                 </div>
-
-                <div class="second_container">
-                    <!-- Gráfico de Barras -->
-                    <div class="card_bar">
-                        <h2>Análises por Dia</h2>
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
-            </div>         
+            </div>
+            
         </section>
     </main>
 
     <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 </body>
 </html>
