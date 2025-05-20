@@ -194,7 +194,7 @@ button:hover {
     background: none;
     border: none;
     padding: 0;
-    width: auto;
+    max-width: 50%;
     height: 100%;
 }
 
