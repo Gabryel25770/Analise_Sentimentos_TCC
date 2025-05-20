@@ -613,9 +613,6 @@ button:hover {
     height: 50%;
 }
 
-.button-to-success{
-  height: fit-content;
-}
 
   .popup-options-buttons{
     flex-direction: column;
