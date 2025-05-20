@@ -5,6 +5,10 @@ function navigateTo(page) {
     
 }
 
+let pizzaChart1 = null;
+let pizzaChart2 = null;
+let barChart = null;
+
 const DEFAULT_DELAY_REFRESH_GRAP = 10000; //10 sec
 window.setInterval(() => {
     carregarDashboard();
@@ -19,6 +23,7 @@ async function carregarDashboard() {
         const data = await resposta.json();
 
         // --- Atualiza gráfico de pizza ---
+        if (pizzaChart1) pizzaChart1.destroy();
         const pizzaCtx = document.getElementById('pizzaChart').getContext('2d');
         new Chart(pizzaCtx, {
             type: 'pie',
@@ -56,6 +61,7 @@ async function carregarDashboard() {
         });
 
         // --- Atualiza gráfico de pizza ---
+        if (pizzaChart2) pizzaChart2.destroy();
         const pizzaCtx2 = document.getElementById('pizzaChart2').getContext('2d');
         new Chart(pizzaCtx2, {
             type: 'pie',
@@ -105,6 +111,7 @@ async function carregarDashboard() {
         });
 
         // --- Atualiza gráfico de barras ---
+        if (barChart) barChart.destroy();
         const barCtx = document.getElementById('barChart').getContext('2d');
         new Chart(barCtx, {
             type: 'bar',
