@@ -4,6 +4,13 @@ function navigateTo(page) {
     window.location.href = page;
 }
 
+window.setInterval(() => {
+    carregarDashboard();
+ 
+}, DEFAULT_DELAY_REFRESH_GRAP);
+ 
+const DEFAULT_DELAY_REFRESH_GRAP = 10000; //10 sec
+
 async function carregarDashboard() {
     try {
         const resposta = await fetch('https://api.analisefeedback.com.br/dashboard-data');
