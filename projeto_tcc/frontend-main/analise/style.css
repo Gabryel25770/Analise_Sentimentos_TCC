@@ -284,6 +284,11 @@ button:hover {
     justify-content: center;
 }
 
+#imageCheckSuccess{
+  height: 100%;
+  width: auto;
+}
+
 .popup-result-text {
     display: flex;
     flex-direction: column;
