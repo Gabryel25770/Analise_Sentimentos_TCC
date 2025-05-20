@@ -345,8 +345,7 @@ button:hover {
 }
 
 /* IMAGES */
-#imageFeedback,
-#imageCheckSuccess {
+#imageFeedback{
     height: 70%;
 }
 
