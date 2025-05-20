@@ -6,3 +6,5 @@ sentencepiece
 gunicorn
 googletrans==4.0.0-rc1
 sqlalchemy
+pandas
+openpyxl

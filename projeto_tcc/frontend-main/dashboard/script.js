@@ -163,4 +163,29 @@ async function carregarDashboard() {
     }
 }
 
+function exportarParaExcel() {
+    fetch("https://api.analisefeedback.com.br/exportar_excel", {
+        method: "GET",
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao exportar dados');
+        }
+        return response.blob(); // Recebe o arquivo
+    })
+    .then(blob => {
+        // Cria um link temporário para baixar o arquivo
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "dados_sentimentos.xlsx";  // Nome do arquivo para download
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    })
+    .catch(error => {
+        console.error("Erro ao tentar exportar o Excel:", error);
+    });
+}
+
 window.onload = carregarDashboard;

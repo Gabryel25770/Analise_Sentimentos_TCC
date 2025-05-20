@@ -152,6 +152,27 @@ canvas {
   overflow-x: auto;
 }
 
+.card_table_header{
+  display:flex;
+  flex-direction: row;
+}
+
+.button-export {
+  padding: o.5rem;
+  font-size: 1rem;
+  width: auto;
+  height: auto;
+  background-color: var(--color-button);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.button-export:hover {
+  background-color: var(--color-button-hover);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -215,6 +236,11 @@ th {
   .card h2 {
     font-size: 1.2rem;
     text-align: center;
+  }
+
+  #barChart{
+    width: 90% !important;
+    height: auto !important;
   }
 
   canvas {

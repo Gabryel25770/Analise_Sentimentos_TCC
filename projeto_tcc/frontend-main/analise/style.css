@@ -610,6 +610,10 @@ button:hover {
     gap: 1rem;
   }
 
+  .popup-success {
+    width: 50%;
+}
+
   .popup-options-buttons{
     flex-direction: column;
     gap: 0.5rem;

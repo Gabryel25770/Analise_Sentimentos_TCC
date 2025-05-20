@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, send_file
 from flask_cors import CORS
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration, AutoTokenizer, AutoModelForSequenceClassification
@@ -8,6 +8,9 @@ from db_models import SessionLocal, Registro
 from sqlalchemy import func, desc
 from collections import defaultdict
 from datetime import datetime, timedelta
+from io import BytesIO
+import pandas as pd
+from sqlalchemy.orm import Session
 
 # --- Flask App ---
 app = Flask(__name__)
@@ -245,6 +248,28 @@ def dashboard_data():
         "analisesPorDia": analises,
         "registros": registros_serializados
     })
+
+# --- Rota para exportar dados para Excel ---
+@app.route("/exportar_excel", methods=["GET"])
+def exportar_excel():
+    db = SessionLocal()
+    registros = db.query(Registro).all()
+    db.close()
+
+    if not registros:
+        return jsonify({"error": "Nenhum dado para exportar."}), 404
+
+    # Criando um DataFrame com os dados do banco
+    data = [{"texto": reg.texto, "sentimento": reg.sentimento} for reg in registros]
+    df = pd.DataFrame(data)
+
+    # Salvando o DataFrame em um arquivo Excel em memória
+    output = BytesIO()
+    df.to_excel(output, index=False, engine="openpyxl")
+    output.seek(0)
+
+    # Enviando o arquivo Excel como resposta
+    return send_file(output, as_attachment=True, download_name="dados_sentimentos.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 # --- Início ---
 if __name__ == "__main__":

@@ -48,7 +48,13 @@
                 <div class="second_container">
                     <!-- Tabela de Registros -->
                     <div class="card card_table">
-                        <h2>10 Registros Mais Recentes</h2>
+                        <div class="card_table_header">
+                            <h2>10 Registros Mais Recentes</h2>
+                            <button class="button-export" type="button" onclick="exportarParaExcel()">
+                                Exportar
+                            </button>
+                        </div>
+                        
                         <table id="registrosTable">
                             <thead>
                                 <tr>
