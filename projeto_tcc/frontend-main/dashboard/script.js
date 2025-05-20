@@ -51,7 +51,7 @@ async function carregarDashboard() {
         new Chart(pizzaCtx2, {
             type: 'pie',
             data: {
-                labels: data.sentimentos_modelo.labels.toLowerCase(),
+                labels: data.sentimentos_modelo.labels.map(label => label.toLowerCase()),
                 datasets: [{
                     data: data.sentimentos_modelo.data,
                     backgroundColor: ['#a61d16', '#807c7c', '#3b7d3c']
