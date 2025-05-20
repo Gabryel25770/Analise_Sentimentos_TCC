@@ -157,7 +157,7 @@ canvas {
     flex-direction: row;
     width: 100%;
     justify-content: end;
-    gap: 2rem;
+    gap: 7rem;
 }
 
 .button-export {
@@ -239,6 +239,10 @@ th {
   .card h2 {
     font-size: 1.2rem;
     text-align: center;
+  }
+
+  .card_table_header {
+    gap: 0.4rem;
   }
 
   #barChart{

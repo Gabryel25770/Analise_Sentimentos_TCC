@@ -25,7 +25,7 @@ async function carregarDashboard() {
         // --- Atualiza gráfico de pizza ---
         if (pizzaChart1) pizzaChart1.destroy();
         const pizzaCtx = document.getElementById('pizzaChart').getContext('2d');
-        new Chart(pizzaCtx, {
+        pizzaChart1 =new Chart(pizzaCtx, {
             type: 'pie',
             data: {
                 labels: data.sentimentos.labels,
@@ -63,7 +63,7 @@ async function carregarDashboard() {
         // --- Atualiza gráfico de pizza ---
         if (pizzaChart2) pizzaChart2.destroy();
         const pizzaCtx2 = document.getElementById('pizzaChart2').getContext('2d');
-        new Chart(pizzaCtx2, {
+        pizzaChart2 = new Chart(pizzaCtx2, {
             type: 'pie',
             data: {
                 labels: data.sentimentos_modelo.labels.map(label => label.toLowerCase()),
@@ -113,7 +113,7 @@ async function carregarDashboard() {
         // --- Atualiza gráfico de barras ---
         if (barChart) barChart.destroy();
         const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
+        barChart = new Chart(barCtx, {
             type: 'bar',
             data: {
                 labels: data.analisesPorDia.labels,
