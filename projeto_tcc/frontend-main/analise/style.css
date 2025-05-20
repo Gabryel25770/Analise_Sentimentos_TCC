@@ -603,15 +603,19 @@ button:hover {
     width: 100%;
   }
 
-  .popup-buttons-yes-no,
-  .popup-success {
+  .popup-buttons-yes-no{
     flex-direction: column;
     height: 70%;
     gap: 1rem;
   }
 
   .popup-success {
-    width: auto;
+    width: 100%;
+    height: 50%;
+}
+
+.button-to-success{
+  height: fit-content;
 }
 
   .popup-options-buttons{
