@@ -19,14 +19,14 @@ class Registro(Base):
     sentimento_modelo = Column(String, nullable=False)  # Nova coluna
     data_criacao = Column(DateTime, default=datetime.utcnow)
 
-# Deleta tabela antiga
-Registro.__table__.drop(engine)
+# # Deleta tabela antiga
+# Registro.__table__.drop(engine)
 
-# Cria tabela nova
-Base.metadata.create_all(bind=engine)
+# # Cria tabela nova
+# Base.metadata.create_all(bind=engine)
 
-# Verifica e exclui registros (opcional)
-db = SessionLocal()
-db.query(Registro).delete()
-db.commit()
-db.close()
+# # Verifica e exclui registros (opcional)
+# db = SessionLocal()
+# db.query(Registro).delete()
+# db.commit()
+# db.close()
