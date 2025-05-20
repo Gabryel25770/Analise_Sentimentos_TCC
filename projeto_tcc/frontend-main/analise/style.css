@@ -606,6 +606,7 @@ button:hover {
   .popup-buttons-yes-no,
   .popup-success {
     flex-direction: column;
+    height: 70%;
     gap: 1rem;
   }
 
