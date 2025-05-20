@@ -152,9 +152,12 @@ canvas {
   overflow-x: auto;
 }
 
-.card_table_header{
-  display:flex;
-  flex-direction: row;
+.card_table_header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: end;
+    gap: 2rem;
 }
 
 .button-export {
