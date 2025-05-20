@@ -103,6 +103,7 @@ async function salvarFeedback() {
     //event.preventDefault();
     const texto = document.getElementById("campotext").value;
     sentimentoResposta = sentimentoResposta.toLowerCase();
+    sentimentoModelo = sentimentoModelo.toLowerCase();
 
     if (!texto || !sentimentoResposta) {
         alert("Texto ou sentimento ausente.");
