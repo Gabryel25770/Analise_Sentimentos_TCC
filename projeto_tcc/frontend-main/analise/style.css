@@ -487,7 +487,7 @@ button:hover {
     gap: 0.5rem;
     border-radius: 32px 32px 0 0;
     width: 100%;
-    height: 50%;
+    height: 55%;
   }
 
   .header-banner{
@@ -495,7 +495,7 @@ button:hover {
     align-items: center;
     justify-content: end;
     width: 100%;
-    height: 50%;
+    height: 45%;
   }
 
   .header-flex-row {
