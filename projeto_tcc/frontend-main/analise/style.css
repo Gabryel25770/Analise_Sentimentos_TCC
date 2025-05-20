@@ -194,8 +194,8 @@ button:hover {
     background: none;
     border: none;
     padding: 0;
-    max-width: 50%;
-    height: 100%;
+    max-width: auto;
+    height: auto;
 }
 
 /* POPUP */
@@ -346,8 +346,7 @@ button:hover {
 
 /* IMAGES */
 #imageFeedback,
-#imageCheckSuccess,
-#mainImage {
+#imageCheckSuccess {
     height: 70%;
 }
 
@@ -612,7 +611,7 @@ button:hover {
   }
 
   .popup-success {
-    width: 50%;
+    width: auto;
 }
 
   .popup-options-buttons{
