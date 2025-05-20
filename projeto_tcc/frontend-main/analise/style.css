@@ -485,7 +485,7 @@ button:hover {
     align-items: center;
     justify-content: center;
     padding: 0.5rem;
-    gap:0.5;
+    gap: 0.5rem;
     border-radius: 32px 32px 0 0;
     width: 100%;
     height: 50%;
