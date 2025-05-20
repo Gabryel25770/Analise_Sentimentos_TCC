@@ -194,8 +194,8 @@ button:hover {
     background: none;
     border: none;
     padding: 0;
-    max-width: auto;
-    height: auto;
+    width: auto;
+    height: 100%;
 }
 
 /* POPUP */
@@ -327,7 +327,7 @@ button:hover {
     background-color: #fff;
     flex-direction: column;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     padding: 10px;
     height: 100%;
     width: 100%
