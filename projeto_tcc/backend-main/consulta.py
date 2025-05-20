@@ -1,13 +1,10 @@
 from db_models import SessionLocal, Registro
 
-def listar_registros():
-    db = SessionLocal()
-    resultados = db.query(Registro).all()
+db = SessionLocal()
 
-    for item in resultados:
-        print(f"ID: {item.id} | Texto: {item.texto} | Sentimento: {item.sentimento} | Data: {item.data_criacao}")
+registros = db.query(Registro).all()
 
-    db.close()
+for r in registros:
+    print(f"ID: {r.id}, Texto: {r.texto}, Sentimento: {r.sentimento}, Modelo: {r.sentimento_modelo}, Data: {r.data_criacao}")
 
-if __name__ == "__main__":
-    listar_registros()
+db.close()
