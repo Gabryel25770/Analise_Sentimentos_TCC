@@ -127,7 +127,7 @@ canvas {
 }
 
 .card_bar{
-  height: 50%;
+  height: 47.3%;
 }
 
 .card_bar,
@@ -142,8 +142,8 @@ canvas {
 }
 
 #barChart{
-  width: 90% !important;
-  height: auto !important;
+  width: auto !important;
+  height: 90% !important;
   max-height: 250px;
 }
 
