@@ -9,6 +9,8 @@ let pizzaChart1 = null;
 let pizzaChart2 = null;
 let barChart = null;
 
+let primeiraAtualizacao = true;
+
 const DEFAULT_DELAY_REFRESH_GRAP = 10000; //10 sec
 window.setInterval(() => {
     carregarDashboard();
@@ -35,6 +37,9 @@ async function carregarDashboard() {
                 }]
             },
             options: {
+                animation: {
+                    duration: primeiraAtualizacao ? 1000 : 0
+                },
                 plugins: {
                     legend: {
                         labels: {
@@ -73,6 +78,9 @@ async function carregarDashboard() {
                 }]
             },
             options: {
+                animation: {
+                    duration: primeiraAtualizacao ? 1000 : 0
+                },
                 plugins: {
                     legend: {
                         labels: {
@@ -119,17 +127,17 @@ async function carregarDashboard() {
                 labels: data.analisesPorDia.labels,
                 datasets: [
                     {
-                        label: 'Positivo',
+                        label: 'positivo',
                         data: data.analisesPorDia.positivo,
                         backgroundColor: '#3b7d3c'
                     },
                     {
-                        label: 'Neutro',
+                        label: 'neutro',
                         data: data.analisesPorDia.neutro,
                         backgroundColor: '#807c7c'
                     },
                     {
-                        label: 'Negativo',
+                        label: 'negativo',
                         data: data.analisesPorDia.negativo,
                         backgroundColor: '#a61d16'
                     }
@@ -137,6 +145,9 @@ async function carregarDashboard() {
             },
             options: {
                 responsive: true,
+                animation: {
+                    duration: primeiraAtualizacao ? 1000 : 0
+                },
                 plugins: {
                     legend: {
                         labels: {
@@ -172,6 +183,8 @@ async function carregarDashboard() {
             },
             plugins: [ChartDataLabels]
         });
+
+        primeiraAtualizacao = false;
 
 
     } catch (error) {
